@@ -1,4 +1,4 @@
-# 🚓 Polis Tableti (MDC) - Final Projesi
+# 🚓 Polis Tableti (MDC)
 
 ## 📌 Proje Hakkında
 
