@@ -1,6 +1,7 @@
 package Algoritmafinal;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class mdcGUI extends JFrame {
@@ -11,141 +12,262 @@ public class mdcGUI extends JFrame {
     JLabel statusLabel;
     String currentUser = "";
 
-    public mdcGUI() {
-        setTitle("MDC Giriş Paneli");
-        setSize(300, 220);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(null);
+    Color background = new Color(18,18,18);
+    Color sidebarColor = new Color(30,30,30);
+    Color buttonColor = new Color(45,45,45);
+    Color accent = new Color(0,120,215);
 
-        JLabel userLabel = new JLabel("Kullanıcı Adı:");
-        userLabel.setBounds(20, 20, 100, 25);
-        add(userLabel);
+    public mdcGUI() {
+
+        setTitle("MDC Police Tablet System");
+        setSize(420,300);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        getContentPane().setBackground(background);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(background);
+
+        JLabel logo = new JLabel("POLICE MDC",SwingConstants.CENTER);
+        logo.setFont(new Font("Segoe UI",Font.BOLD,26));
+        logo.setForeground(Color.WHITE);
+        logo.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+        JPanel form = new JPanel(new GridLayout(4,2,10,10));
+        form.setBorder(BorderFactory.createEmptyBorder(20,40,20,40));
+        form.setBackground(background);
+
+        JLabel userLabel = new JLabel("Kullanıcı Adı");
+        userLabel.setForeground(Color.WHITE);
+
+        JLabel passLabel = new JLabel("Şifre");
+        passLabel.setForeground(Color.WHITE);
 
         usernameField = new JTextField();
-        usernameField.setBounds(120, 20, 140, 25);
-        add(usernameField);
-
-        JLabel passLabel = new JLabel("Şifre:");
-        passLabel.setBounds(20, 60, 100, 25);
-        add(passLabel);
-
         passwordField = new JPasswordField();
-        passwordField.setBounds(120, 60, 140, 25);
-        add(passwordField);
+
+        usernameField.setFont(new Font("Segoe UI",Font.PLAIN,14));
+        passwordField.setFont(new Font("Segoe UI",Font.PLAIN,14));
 
         loginButton = new JButton("Giriş Yap");
-        loginButton.setBounds(90, 100, 100, 30);
-        add(loginButton);
+        loginButton.setBackground(accent);
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFocusPainted(false);
+        loginButton.setFont(new Font("Segoe UI",Font.BOLD,14));
 
-        statusLabel = new JLabel("");
-        statusLabel.setBounds(20, 140, 250, 25);
-        add(statusLabel);
+        statusLabel = new JLabel("",SwingConstants.CENTER);
+        statusLabel.setForeground(Color.RED);
+
+        form.add(userLabel);
+        form.add(usernameField);
+        form.add(passLabel);
+        form.add(passwordField);
+        form.add(new JLabel(""));
+        form.add(loginButton);
+        form.add(statusLabel);
+
+        panel.add(logo,BorderLayout.NORTH);
+        panel.add(form,BorderLayout.CENTER);
+
+        add(panel);
 
         loginButton.addActionListener(e -> {
+
             String user = usernameField.getText();
             String pass = new String(passwordField.getPassword());
 
-            if (user.equals("Murat") && pass.equals("123mrt123")) {
+            if(user.equals("Murat") && pass.equals("123mrt123")){
                 currentUser = user;
                 openMainPanel();
                 dispose();
-            } else {
-                statusLabel.setText("Hatalı kullanıcı adı veya şifre!");
             }
+            else{
+                statusLabel.setText("Hatalı giriş!");
+            }
+
         });
 
         setVisible(true);
     }
 
-    private void openMainPanel() {
-        JFrame panelFrame = new JFrame("MDC Ana Panel - Hoş geldin " + currentUser);
-        panelFrame.setSize(500, 350);
-        panelFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        panelFrame.setLayout(null);
 
-        String[] options = {
-                "Şüpheli Sorgulama",
-                "Plaka Sorgulama",
-                "Rapor Ekle",
-                "Görev Belirle",
-                "Kullanıcı Ekle"
-        };
+    private void openMainPanel(){
 
-        JList<String> list = new JList<>(options);
-        list.setBounds(30, 30, 200, 150);
-        panelFrame.add(list);
+        JFrame frame = new JFrame("MDC Tablet - " + currentUser);
+        frame.setSize(1000,650);
+        frame.setLocationRelativeTo(null);
+        frame.setLayout(new BorderLayout());
 
-        JButton secButton = new JButton("Seç");
-        secButton.setBounds(250, 80, 100, 30);
-        panelFrame.add(secButton);
+        JPanel sidebar = new JPanel();
+        sidebar.setLayout(new GridLayout(8,1,8,8));
+        sidebar.setBackground(sidebarColor);
+        sidebar.setBorder(BorderFactory.createEmptyBorder(15,10,15,10));
+        sidebar.setPreferredSize(new Dimension(220,0));
 
-        secButton.addActionListener(e -> {
-            int selected = list.getSelectedIndex();
-            switch (selected) {
-                case 0 -> suspectSorgu();
-                case 1 -> plakaSorgu();
-                case 2 -> raporEkle();
-                case 3 -> gorevBelirle();
-                case 4 -> kullaniciEkle();
-                default -> JOptionPane.showMessageDialog(panelFrame, "Lütfen bir işlem seçin.");
-            }
-        });
+        JLabel logo = new JLabel("MDC",SwingConstants.CENTER);
+        logo.setFont(new Font("Segoe UI",Font.BOLD,24));
+        logo.setForeground(Color.WHITE);
 
-        panelFrame.setVisible(true);
+        JButton suspectBtn = createButton("Şüpheli Sorgu");
+        JButton plakaBtn = createButton("Plaka Sorgu");
+        JButton raporBtn = createButton("Rapor Yaz");
+        JButton gorevBtn = createButton("Görev Ver");
+        JButton userBtn = createButton("Kullanıcı Ekle");
+
+        sidebar.add(logo);
+        sidebar.add(new JLabel());
+        sidebar.add(suspectBtn);
+        sidebar.add(plakaBtn);
+        sidebar.add(raporBtn);
+        sidebar.add(gorevBtn);
+        sidebar.add(userBtn);
+
+        JPanel content = new JPanel(new BorderLayout());
+        content.setBackground(background);
+
+        JLabel title = new JLabel("POLICE DATABASE SYSTEM",SwingConstants.CENTER);
+        title.setFont(new Font("Segoe UI",Font.BOLD,30));
+        title.setForeground(Color.WHITE);
+        title.setBorder(BorderFactory.createEmptyBorder(20,0,20,0));
+
+        JPanel dashboard = new JPanel(new GridLayout(2,2,20,20));
+        dashboard.setBorder(BorderFactory.createEmptyBorder(40,80,40,80));
+        dashboard.setBackground(background);
+
+        dashboard.add(createCard("Aktif Görevler","3"));
+        dashboard.add(createCard("Bugünkü Rapor","12"));
+        dashboard.add(createCard("Aranan Şahıs","5"));
+        dashboard.add(createCard("Kayıtlı Araç","248"));
+
+        content.add(title,BorderLayout.NORTH);
+        content.add(dashboard,BorderLayout.CENTER);
+
+        frame.add(sidebar,BorderLayout.WEST);
+        frame.add(content,BorderLayout.CENTER);
+
+        suspectBtn.addActionListener(e->suspectSorgu());
+        plakaBtn.addActionListener(e->plakaSorgu());
+        raporBtn.addActionListener(e->raporEkle());
+        gorevBtn.addActionListener(e->gorevBelirle());
+        userBtn.addActionListener(e->kullaniciEkle());
+
+        frame.setVisible(true);
+
     }
 
-    private void suspectSorgu() {
-        String tc = JOptionPane.showInputDialog("T.C. Kimlik Numarası girin:");
-        if (tc == null) return;
 
-        if (tc.equals("12345678901")) {
-            JOptionPane.showMessageDialog(this, "Ad: Ahmet Yılmaz\nSuç Kaydı: Hırsızlık (2022)\nAranma Durumu: Aktif");
-        } else if (tc.equals("98765432109")) {
-            JOptionPane.showMessageDialog(this, "Ad: Elif Demir\nSuç Kaydı: Temiz\nAranma Durumu: Yok");
-        } else {
-            JOptionPane.showMessageDialog(this, "Kayıt bulunamadı.");
+    private JButton createButton(String text){
+
+        JButton b = new JButton(text);
+        b.setFocusPainted(false);
+        b.setBackground(buttonColor);
+        b.setForeground(Color.WHITE);
+        b.setFont(new Font("Segoe UI",Font.BOLD,14));
+        b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        return b;
+    }
+
+
+    private JPanel createCard(String title,String value){
+
+        JPanel card = new JPanel(new BorderLayout());
+        card.setBackground(new Color(40,40,40));
+        card.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+
+        JLabel t = new JLabel(title);
+        t.setForeground(Color.LIGHT_GRAY);
+        t.setFont(new Font("Segoe UI",Font.BOLD,14));
+
+        JLabel v = new JLabel(value);
+        v.setForeground(Color.WHITE);
+        v.setFont(new Font("Segoe UI",Font.BOLD,32));
+
+        card.add(t,BorderLayout.NORTH);
+        card.add(v,BorderLayout.CENTER);
+
+        return card;
+    }
+
+
+    private void suspectSorgu(){
+
+        String tc = JOptionPane.showInputDialog("TC Kimlik gir");
+
+        if(tc==null) return;
+
+        if(tc.equals("12345678901")){
+
+            JOptionPane.showMessageDialog(this,
+                    "Ad: Ahmet Yılmaz\n"
+                            +"Suç: Hırsızlık\n"
+                            +"Durum: ARANIYOR");
+
         }
-    }
+        else{
 
-    private void plakaSorgu() {
-        String plaka = JOptionPane.showInputDialog("Plaka girin (örn: 34ABC123):");
-        if (plaka == null) return;
+            JOptionPane.showMessageDialog(this,"Kayıt bulunamadı");
 
-        if (plaka.equalsIgnoreCase("34ABC123")) {
-            JOptionPane.showMessageDialog(this, "Araç Sahibi: Cem Karaca\nMarka: BMW\nÇalıntı Durumu: Hayır");
-        } else if (plaka.equalsIgnoreCase("06XYZ789")) {
-            JOptionPane.showMessageDialog(this, "Araç Sahibi: Sevim Kaya\nMarka: Mercedes\nÇalıntı Durumu: Çalıntı!");
-        } else {
-            JOptionPane.showMessageDialog(this, "Plaka bilgisi bulunamadı.");
         }
+
     }
 
-    private void raporEkle() {
-        String yazan = JOptionPane.showInputDialog("Raporu yazan kişi:");
-        String lokasyon = JOptionPane.showInputDialog("Olay lokasyonu:");
-        String olay = JOptionPane.showInputDialog("Olayı açıklayın:");
-        String tarih = JOptionPane.showInputDialog("Tarih (örn: 25/04/2025 18:45):");
 
-        JOptionPane.showMessageDialog(this, "Rapor Yazarı: " + yazan + "\nOlay: " + olay + "\nLokasyon: " + lokasyon + "\nTarih: " + tarih);
+    private void plakaSorgu(){
+
+        String plaka = JOptionPane.showInputDialog("Plaka gir");
+
+        if(plaka==null) return;
+
+        if(plaka.equalsIgnoreCase("34ABC123")){
+
+            JOptionPane.showMessageDialog(this,
+                    "Araç: BMW\n"
+                            +"Sahip: Cem Karaca\n"
+                            +"Durum: Temiz");
+
+        }
+        else{
+
+            JOptionPane.showMessageDialog(this,"Araç bulunamadı");
+
+        }
+
     }
 
-    private void gorevBelirle() {
-        String polis = JOptionPane.showInputDialog("Polisin adı:");
-        String lokasyon = JOptionPane.showInputDialog("Görev lokasyonu:");
 
-        JOptionPane.showMessageDialog(this, "TELSİZ: Memur " + polis + ", " + currentUser + " amir tarafından " + lokasyon + " görevine yönlendirildi.");
+    private void raporEkle(){
+
+        String rapor = JOptionPane.showInputDialog("Olay raporu yaz");
+
+        JOptionPane.showMessageDialog(this,"Rapor kaydedildi");
+
     }
 
-    private void kullaniciEkle() {
-        String mod = JOptionPane.showInputDialog("Ekleyen moderatör:");
-        String uname = JOptionPane.showInputDialog("Yeni kullanıcı adı:");
-        String pass = JOptionPane.showInputDialog("Yeni kullanıcı şifresi:");
-        String rutbe = JOptionPane.showInputDialog("Yeni kullanıcı rütbesi:");
 
-        JOptionPane.showMessageDialog(this, "Yeni kullanıcı eklendi!\nUsername: " + uname + "\nŞifre: " + pass + "\nRütbe: " + rutbe);
+    private void gorevBelirle(){
+
+        String polis = JOptionPane.showInputDialog("Polis adı");
+
+        JOptionPane.showMessageDialog(this,
+                "TELSİZ:\nMemur " + polis + " görevlendirildi.");
+
     }
+
+
+    private void kullaniciEkle(){
+
+        String user = JOptionPane.showInputDialog("Yeni kullanıcı");
+
+        JOptionPane.showMessageDialog(this,"Kullanıcı eklendi: " + user);
+
+    }
+
 
     public static void main(String[] args) {
-        new mdcGUI();
+
+        SwingUtilities.invokeLater(() -> new mdcGUI());
+
     }
+
 }
