@@ -4,7 +4,7 @@
 
 **Polis Tableti (MDC - Mobile Data Computer)** projesi, polis memurlarının sahada daha etkin, hızlı ve güvenli bilgiye erişebilmesini sağlamak amacıyla geliştirilmiştir. Bu uygulama sayesinde, görevli personel; plaka sorgulama, kişi bilgisi tarama, görev takibi gibi işlemleri tablet veya mobil cihaz üzerinden yapabilir.
 
-- 🎓 **Proje Sahibi:** Murat Agit Çınar
+- 🎓 **Proje Sahibi:** Murat
 - 🛠️ **Teknolojiler:** Java (İntelij)
 
 ---
